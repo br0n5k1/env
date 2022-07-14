@@ -1,0 +1,10 @@
+sync:
+  defaults:
+    ignore:
+      vcs: true
+      paths:
+        - ".DS_Store"
+        - ".Trash"
+        - ".git"
+        - ".npm"
+        - "node_modules"
