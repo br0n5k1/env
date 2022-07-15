@@ -252,10 +252,32 @@
   :init
   (require 'tree-sitter-langs))
 
-;; Tree-sitter has a limited set of supported languages, excluding:
+;; XXX Tree-sitter has a limited set of supported languages, excluding:
 ;;  - Haskell
+;;  - ?
 (when supports/dynamic-module
   (global-tree-sitter-mode)
   (add-hook 'tree-sitter-after-on-hook
             (lambda ()
               (tree-sitter-hl-mode))))
+
+;; Use company for basic completion:
+
+(use-package company
+  :straight t
+  :ensure t
+  :init
+  (add-hook 'prog-mode-hook
+            (lambda ()
+              (company-mode)))
+  :custom
+  (company-idle-delay 0)
+  (company-show-numbers t))
+
+;; Use Tabnine for more meaningful completion:
+;;
+;; NOTE Call `company-tabnine-install-binary' to install Tabnine executable.
+(use-package company-tabnine
+  :straight t
+  :ensure t
+  :init (add-to-list 'company-backends #'company-tabnine))
