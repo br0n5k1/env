@@ -183,6 +183,40 @@
   (setq web-mode-script-padding 1)
   (add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode)))
 
+;; Add basic support for Haskell:
+
+(use-package haskell-mode
+  :straight t
+  :ensure t)
+
+;; Add basic support for Elixir:
+
+(use-package elixir-mode
+  :straight t
+  :ensure t)
+
+;; Add basic support for PHP:
+
+(use-package php-mode
+  :straight t
+  :ensure t)
+
+;; Add basic support for JavaScript:
+
+(use-package js2-mode
+  :straight t
+  :ensure t
+  :init
+  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
+
+(use-package js2-refactor
+  :straight t
+  :ensure t
+  :init
+  (add-hook 'js2-mode-hook
+            (lambda ()
+              (js2-refactor-mode))))
+
 ;; Use tree-sitter to highlight programming languages:
 
 (defconst supports/dynamic-module 
@@ -202,6 +236,8 @@
   :init
   (require 'tree-sitter-langs))
 
+;; Tree-sitter has a limited set of supported languages, excluding:
+;;  - Haskell
 (when supports/dynamic-module
   (global-tree-sitter-mode)
   (add-hook 'tree-sitter-after-on-hook
