@@ -316,8 +316,8 @@
   (setq modus-themes-fringes 'subtle)
   (custom/update-theme))
 
-;; Change themes automatically:
+;; Change themes automagically:
 
-(let ((interval-seconds 15)
+(let ((interval-seconds 5)
       (repeat t))
   (run-with-idle-timer interval-seconds repeat 'custom/update-theme))
