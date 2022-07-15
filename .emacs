@@ -282,23 +282,42 @@
   :ensure t
   :init (add-to-list 'company-backends #'company-tabnine))
 
-;; Use Solarized themes:
+;; Use custom theme:
 
-(defun custom/dark-mode ()
+(defcustom custom/dark-theme 'tango-dark
+  "Theme to use for dark mode.")
+
+(defcustom custom/light-theme 'tango
+  "Theme to use for light mode.")
+
+(defun custom/mode ()
   (let ((command "printf %s \"$( osascript -e \'tell application \"System Events\" to tell appearance preferences to return dark mode\' )\""))
-    (string-equal (shell-command-to-string command) "true")))
+    (if (string-equal (shell-command-to-string command) "true")
+        'dark
+      'light)))
 
-(defun custom/solarized-theme ()
+(defun custom/update-theme ()
   "Use dark or light theme based on time."
   (interactive)
-  (if (custom/dark-mode)
-      (load-theme 'solarized-dark t)
-    (load-theme 'solarized-light t)))
+  (when (and custom/light-theme custom/dark-theme)
+    (let ((mode (custom/mode)))
+      (if (eq mode 'dark)
+          (load-theme custom/dark-theme t)
+        (load-theme custom/light-theme t)))))
 
-(use-package solarized-theme
+(use-package modus-themes
   :straight t
   :ensure t
   :init
-  (setq solarized-high-contrast-mode-line t)
-  (setq solarized-use-more-italic t)
-  (custom/solarized-theme))
+  (setq custom/dark-theme 'modus-vivendi)
+  (setq custom/light-theme 'modus-operandi)
+  (setq modus-themes-italic-constructs t)
+  (setq modus-themes-bold-constructs t)
+  (setq modus-themes-fringes 'subtle)
+  (custom/update-theme))
+
+;; Change themes automatically:
+
+(let ((interval-seconds 15)
+      (repeat t))
+  (run-with-idle-timer interval-seconds repeat 'custom/update-theme))
