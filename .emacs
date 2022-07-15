@@ -290,17 +290,17 @@
 (defcustom custom/light-theme 'tango
   "Theme to use for light mode.")
 
-(defun custom/mode ()
+(defun custom/get-application-mode ()
   (let ((command "printf %s \"$( osascript -e \'tell application \"System Events\" to tell appearance preferences to return dark mode\' )\""))
     (if (string-equal (shell-command-to-string command) "true")
         'dark
-      'light)))
+      'light))) ; TODO Handle Linux and Windows.
 
 (defun custom/update-theme ()
   "Use dark or light theme based on time."
   (interactive)
   (when (and custom/light-theme custom/dark-theme)
-    (let ((mode (custom/mode)))
+    (let ((mode (custom/get-application-mode)))
       (if (eq mode 'dark)
           (load-theme custom/dark-theme t)
         (load-theme custom/light-theme t)))))
