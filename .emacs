@@ -281,3 +281,24 @@
   :straight t
   :ensure t
   :init (add-to-list 'company-backends #'company-tabnine))
+
+;; Use Solarized themes:
+
+(defun custom/dark-mode ()
+  (let ((command "printf %s \"$( osascript -e \'tell application \"System Events\" to tell appearance preferences to return dark mode\' )\""))
+    (string-equal (shell-command-to-string command) "true")))
+
+(defun custom/solarized-theme ()
+  "Use dark or light theme based on time."
+  (interactive)
+  (if (custom/dark-mode)
+      (load-theme 'solarized-dark t)
+    (load-theme 'solarized-light t)))
+
+(use-package solarized-theme
+  :straight t
+  :ensure t
+  :init
+  (setq solarized-high-contrast-mode-line t)
+  (setq solarized-use-more-italic t)
+  (custom/solarized-theme))
