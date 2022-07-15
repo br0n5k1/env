@@ -75,6 +75,10 @@
 (setq scroll-conservatively 10000)
 (setq scroll-preserve-screen-position t)
 
+;; Simple mode to repeat commands:
+
+(repeat-mode t)
+
 ;; Add basic comforts for text:
 
 (add-hook 'text-mode-hook
