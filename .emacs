@@ -167,3 +167,14 @@
   :straight t
   :ensure t
   :hook (magit-mode . magit-delta-mode))
+
+;; Use web-mode to edit templates:
+
+(use-package web-mode
+  :straight t
+  :ensure t
+  :init
+  (setq web-mode-markup-indent-offset 1)
+  (setq web-mode-style-padding 1)
+  (setq web-mode-script-padding 1)
+  (add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode)))
