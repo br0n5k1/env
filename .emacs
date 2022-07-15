@@ -182,3 +182,28 @@
   (setq web-mode-style-padding 1)
   (setq web-mode-script-padding 1)
   (add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode)))
+
+;; Use tree-sitter to highlight programming languages:
+
+(defconst supports/dynamic-module 
+  (and (functionp 'module-load) (not (null module-file-suffix))))
+
+(use-package tree-sitter
+  :if supports/dynamic-module
+  :straight t
+  :ensure t
+  :init
+  (require 'tree-sitter))
+
+(use-package tree-sitter-langs
+  :if supports/dynamic-module
+  :straight t
+  :ensure t
+  :init
+  (require 'tree-sitter-langs))
+
+(when supports/dynamic-module
+  (global-tree-sitter-mode)
+  (add-hook 'tree-sitter-after-on-hook
+            (lambda ()
+              (tree-sitter-hl-mode))))
