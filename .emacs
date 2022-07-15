@@ -100,5 +100,70 @@
 
 (add-hook 'prog-mode-hook
           (lambda ()
-	    (show-paren-local-mode t)
+            (hl-line-mode t)
+            (show-paren-local-mode t)
             (display-line-numbers-mode t)))
+
+;; Use better package manager:
+;;
+;; Requires default package manager disabled in early-init.el file,
+;; see https://github.com/radian-software/straight.el#getting-started for explanation.
+
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+
+(straight-use-package 'use-package) ; Integrate with `use-package' macro for easy configuration options.
+
+;; Add support for popular config formats:
+
+(use-package toml-mode
+  :straight t
+  :ensure t)
+
+(use-package yaml-mode
+  :straight t
+  :ensure t)
+
+;; Use Vim emulation for better editing experience:
+
+(use-package evil
+  :straight t
+  :ensure t
+  :config (evil-mode t))
+
+(use-package evil-nerd-commenter
+  :straight t
+  :ensure t)
+
+;; Use Magit for superior Git experience:
+
+(use-package magit
+  :straight t
+  :ensure t
+  :bind ("C-c C-s" . magit-status))
+
+;; Add vendor binaries to the `exec-path' list:
+(let ((custom-bin (expand-file-name "bin" (file-name-directory load-file-name))))
+  (push custom-bin exec-path))
+
+;; Delta is a popular tool that improves git diffs:
+;;
+;; XXX Make sure delta is in `exec-path'.
+;;
+;; Manual configuration required,
+;; see https://github.com/dandavison/delta
+;; see https://scripter.co/using-git-delta-with-magit/
+(use-package magit-delta
+  :straight t
+  :ensure t
+  :hook (magit-mode . magit-delta-mode))
