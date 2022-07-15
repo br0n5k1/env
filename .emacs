@@ -217,6 +217,22 @@
             (lambda ()
               (js2-refactor-mode))))
 
+;; Make TODOs visible:
+
+(use-package hl-todo
+  :straight t
+  :ensure t
+  :hook (prog-mode . hl-todo-mode)
+  :config
+  (setq hl-todo-highlight-punctuation ":"
+        hl-todo-keyword-faces
+        `(("FIXME"    error bold)
+          ("HACK"     error bold)
+          ("XXX"      error bold)
+          ("TODO"     error bold)
+          ("TECHDEBT" error bold)
+          ("NOTE"     error bold))))
+
 ;; Use tree-sitter to highlight programming languages:
 
 (defconst supports/dynamic-module 
