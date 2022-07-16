@@ -297,7 +297,7 @@
       'light))) ; TODO Handle Linux and Windows.
 
 (defun custom/update-theme ()
-  "Use dark or light theme based on time."
+  "Use dark or light theme based on application mode."
   (interactive)
   (when (and custom/light-theme custom/dark-theme)
     (let ((mode (custom/get-application-mode)))
