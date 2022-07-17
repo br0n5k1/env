@@ -59,15 +59,6 @@
 
 (toggle-frame-maximized)
 
-;; Use Ido-mode to navigate between files:
-
-(require 'ido)
-
-(setq ido-enable-flex-matching t)
-
-(ido-mode t)
-(ido-everywhere t)
-
 ;; Make cursor less jumpy:
 
 (setq scroll-margin 3)
@@ -323,3 +314,33 @@
 (let ((interval-seconds 5)
       (repeat t))
   (run-with-idle-timer interval-seconds repeat 'custom/update-theme))
+
+;; Ido replacement with better interface:
+
+(use-package vertico
+  :straight t
+  :ensure t
+  :init
+  (vertico-mode)
+  (setq vertico-cycle t)
+  (setq vertico-resize t)
+  (setq vertico-count 15)
+  (setq vertico-scroll-margin 2)
+  (setq enable-recursive-minibuffers t))
+
+;; Save history for future completions:
+
+(use-package savehist
+  :straight t
+  :ensure t
+  :init
+  (savehist-mode))
+
+;; Custom completion style using space-separated components:
+
+(use-package orderless
+  :straight t
+  :ensure t
+  :custom
+  (completion-styles '(orderless basic))
+  (completion-category-overrides '((file (styles basic partial-completion)))))
