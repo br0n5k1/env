@@ -675,8 +675,8 @@
 (use-package zoom
   :straight t
   :ensure t
-  :init
-  (zoom-mode t))
+  :bind
+  ("C-x +" . zoom))
 
 ;; Visually separate non-file-visiting-windows:
 
