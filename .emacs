@@ -49,10 +49,22 @@
             (let ((process (get-buffer-process (current-buffer))))
               (set-process-query-on-exit-flag process nil))))
 
+;; Change windows by S + <arrow> keys:
+
+(when (fboundp 'windmove-default-keybindings)
+  (windmove-default-keybindings))
+
 ;; Use my preferred font:
 ;;
 ;; See https://monolisa.dev for examples.
-(let ((preferred-font (font-spec :family "MonoLisa Custom" :size 16)))
+
+(defcustom custom/font-name "MonoLisa Custom"
+  "Preferred font name.")
+
+(defcustom custom/font-size 16
+  "Preferred font size.")
+
+(let ((preferred-font (font-spec :family custom/font-name :size custom/font-size)))
   (when (find-font preferred-font)
     (set-frame-font preferred-font t t t)))
 
