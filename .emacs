@@ -9,6 +9,9 @@
 (when (featurep 'scroll-bar)
   (scroll-bar-mode -1))
 
+(when (featurep 'fringe)
+  (fringe-mode 0))
+
 (setq inhibit-startup-echo-area-message t)
 (setq inhibit-startup-screen t)
 (setq inhibit-startup-message t)
