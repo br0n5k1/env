@@ -692,8 +692,8 @@
   :straight t
   :ensure t
   :init
-  (define-key evil-normal-state-map (kbd "M-n") 'symbol-overlay-jump-next)
-  (define-key evil-normal-state-map (kbd "M-N") 'symbol-overlay-jump-prev)
+  (define-key evil-normal-state-map (kbd ">") 'symbol-overlay-jump-next)
+  (define-key evil-normal-state-map (kbd "<") 'symbol-overlay-jump-prev)
   (define-key evil-normal-state-map (kbd "m") 'symbol-overlay-put))
 
 ;; Many active cursors:
