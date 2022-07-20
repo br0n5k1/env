@@ -114,9 +114,7 @@
 
 (add-hook 'prog-mode-hook
           (lambda ()
-            (hl-line-mode t)
-            (show-paren-local-mode t)
-            (display-line-numbers-mode t)))
+            (show-paren-local-mode t)))
 
 ;; Use better package manager:
 ;;
