@@ -807,6 +807,8 @@
   :after (treemacs magit)
   :ensure t)
 
+;; TODO Use Flycheck.
+
 ;; Save and load presets of files open:
 
 (use-package workgroups2
