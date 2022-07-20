@@ -26,6 +26,11 @@
 
 (setq create-lockfiles nil)
 
+;; Use graphical window dividers:
+
+(when (display-graphic-p)
+  (window-divider-mode t))
+
 ;; Make sure Unicode is set up by default everywhere:
 
 (prefer-coding-system 'utf-8)
