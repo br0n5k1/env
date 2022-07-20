@@ -273,73 +273,214 @@
   (company-idle-delay 0)
   (company-show-numbers t))
 
+;; Show completions in child frame:
+
+(use-package company-box
+  :straight t
+  :ensure t
+  :after (company)
+  :hook
+  (company-mode . company-box-mode))
+
 ;; Use Tabnine for more meaningful completion:
 ;;
-;; NOTE Call `company-tabnine-install-binary' to install Tabnine executable.
+;; NOTE M-x `company-tabnine-install-binary' to install Tabnine daemon executable.
 (use-package company-tabnine
   :straight t
   :ensure t
-  :init (add-to-list 'company-backends #'company-tabnine))
+  :after (company company-box)
+  :init
+  (add-to-list 'company-backends #'company-tabnine))
+
+;; Show code smells marks:
+;;
+;; BUG THIS PACKAGE FAILS TO KEEP SETTINGS WHEN THE THEME IS RELOADED
+;; BUG EXAMPLE, WHEN SWITCHING BETWEEN DAY/NIGHT THEMES
+
+(defun custom/--update-todo-keywords-faces ()
+  "Set custom faces and reload hl-todo package."
+  (setq hl-todo-keyword-faces
+	    '(("TODO"     . "#FF0000")
+          ("NOTE"     . "#FF0000")
+          ("HACK"     . "#FF0000")
+          ("BUG"      . "#FF0000")
+          ("XXX"      . "#FF0000")
+          ("FIXME"    . "#FF0000")
+          ("TECHDEBT" . "#FF0000")))
+  (global-hl-todo-mode))
+
+(use-package hl-todo
+  :straight t
+  :ensure t
+  :init
+  (custom/--update-todo-keywords-faces))
+
+;; Small mode-line enhancements:
+
+(use-package moody
+  :straight t
+  :ensure t
+  :init
+  (setq x-underline-at-descent-line t))
 
 ;; Use custom theme:
 
-(defcustom custom/dark-theme 'tango-dark
-  "Theme to use for dark mode.")
-
 (defcustom custom/light-theme 'tango
-  "Theme to use for light mode.")
+  "Theme to use in light mode.")
 
-(defun custom/get-application-mode ()
+(defcustom custom/dark-theme 'tango-dark
+  "Theme to use in dark mode.")
+
+(defun custom/--get-system-theme ()
+  "Determines if underlying system uses light or dark appearance."
   (let ((command "printf %s \"$( osascript -e \'tell application \"System Events\" to tell appearance preferences to return dark mode\' )\""))
     (if (string-equal (shell-command-to-string command) "true")
         'dark
-      'light))) ; TODO Handle Linux and Windows.
+      'light))) ; TODO Change to work on Linux and Windows.
+
+(defvar custom/--system-theme nil)
 
 (defun custom/update-theme ()
-  "Use dark or light theme based on application mode."
+  "Use dark or light theme in sync with the system."
   (interactive)
   (when (and custom/light-theme custom/dark-theme)
-    (let ((mode (custom/get-application-mode)))
-      (if (eq mode 'dark)
-          (load-theme custom/dark-theme t)
-        (load-theme custom/light-theme t)))))
+    (let ((system-theme (custom/--get-system-theme)))
+      (when (not (eq custom/--system-theme system-theme))
+        (if (eq system-theme 'dark)
+            (load-theme custom/dark-theme t)
+          (load-theme custom/light-theme t))
+        (custom/--update-todo-keywords-faces) ; HACK Apply above package again to make it re-read settings.
+        (setq custom/--system-theme system-theme)))))
 
 (use-package modus-themes
   :straight t
   :ensure t
+  :after (hl-todo)
   :init
-  (setq custom/dark-theme 'modus-vivendi)
   (setq custom/light-theme 'modus-operandi)
-  (setq modus-themes-italic-constructs t)
+  (setq custom/dark-theme 'modus-vivendi)
   (setq modus-themes-bold-constructs t)
   (setq modus-themes-fringes 'subtle)
-  (custom/update-theme))
+  (setq modus-themes-subtle-line-numbers t)
+  (setq modus-themes-syntax '(alt-syntax))
+  (setq modus-themes-mode-line '(moody))
+  (setq modus-themes-links '(neutral-underline background))
+  (setq modus-themes-promts '(background bold))
+  (setq modus-themes-markup '(bold italic background intense))
+  (setq modus-themes-paren-match '(bold intense))
+  (setq modus-themes-region '(no-extend bg-only))
+  (custom/update-theme)
+  (let ((comment "#004c2e")
+        (divider "#bcbcbc")
+        (fadeout "#efefef"))
+    (set-face-attribute 'font-lock-comment-face nil :foreground comment)
+    (set-face-attribute 'font-lock-comment-delimiter-face nil :foreground comment)
+    (set-face-attribute 'mode-line nil :overline divider)
+    (set-face-attribute 'mode-line nil :underline (list :color divider))
+    (set-face-attribute 'mode-line-inactive nil :background fadeout)
+    (set-face-attribute 'window-divider nil :foreground fadeout)
+    (set-face-attribute 'window-divider-first-pixel nil :foreground divider)
+    (set-face-attribute 'window-divider-last-pixel nil :foreground divider)
+    ))
 
 ;; Change themes automagically:
 
-(let ((interval-seconds 5)
+(defcustom custom/system-theme-change-detect-interval 3
+  "Seconds between theme update attempts.")
+
+(let ((interval custom/system-theme-change-detect-interval)
       (repeat t))
-  (run-with-idle-timer interval-seconds repeat 'custom/update-theme))
+  (run-with-idle-timer interval repeat 'custom/update-theme))
+
+;; Insert pairing brackets:
+
+(use-package smartparens
+  :straight t
+  :ensure t
+  :init
+  (require 'smartparens-config)
+  :hook
+  (prog-mode . smartparens-mode))
+
+;; Select portions of text with + and - keys:
+
+(use-package expand-region
+  :straight t
+  :ensure t
+  :init
+  (define-key evil-normal-state-map (kbd "+") 'er/expand-region)
+  (define-key evil-normal-state-map (kbd "-") 'er/contract-region))
+
+;; Cleanup whitespace:
+
+(use-package whitespace-cleanup-mode
+  :straight t
+  :ensure t
+  :hook
+  (prog-mode . whitespace-cleanup-mode))
+
+;; Automatic indentation of code:
+
+(use-package aggressive-indent
+  :straight t
+  :ensure t
+  :hook
+  (prog-mode . aggressive-indent-mode))
+
+;; Apply different color to parens based on the level of nesting:
+
+(use-package rainbow-delimiters
+  :straight t
+  :ensure t
+  :hook
+  (prog-mode . rainbow-delimiters-mode))
 
 ;; Manage projects from Emacs:
+;;
+;; NOTE Requires Magit to know where to find repositories.
+
+(defun update-projects () ; No prefix for simpler interactive calls.
+  "Add repositories known to Magit as projects."
+  (interactive)
+  (unless (featurep 'magit)
+    (require 'magit))
+  (mapcar 'projectile-add-known-project (magit-list-repos)))
 
 (use-package projectile
   :straight t
   :ensure t
   :init
   (projectile-mode t)
+  (update-projects)
   (define-key projectile-mode-map (kbd "M-p") 'projectile-command-map)
-  (require 'magit)
-  (dolist (repo (magit-list-repos))
-    (projectile-add-known-project repo))
   (setq projectile-require-project-root t)
   (setq projectile-switch-project-action #'projectile-find-file)
   (setq projectile-enable-caching t)
   (setq projectile-file-exists-remote-cache-expire nil))
 
-;; Cool commands for context switching:
+;; Simple yet better-than-default in-buffer search:
+
+(use-package ctrlf
+  :straight t
+  :ensure t
+  :init
+  (ctrlf-mode t))
+
+;; Try Embark + Marginalia for context-based actions text and files:
+
+(use-package marginalia
+  :straight t
+  :ensure t
+  :config
+  (marginalia-mode))
+
+
+
+;; Cool interface for context switching:
 ;;
 ;; NOTE This configuration is a rough copy from package documentation.
+;; NOTE I keep it here while learning.
+;; TODO Narrow required functions and delete the rest.
 (use-package consult
   :straight t
   :ensure t
