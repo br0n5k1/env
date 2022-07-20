@@ -175,7 +175,7 @@
   :straight t
   :ensure t
   :bind
-  ("C-c C-s" . magit-status)
+  ("C-x C-g" . magit-status)
   :init
   (let ((path (expand-file-name "src" (file-name-directory load-file-name)))
         (depth 2))
