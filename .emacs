@@ -868,7 +868,5 @@
   :init
   (setq wg-prefix-key "C-c C-z"))
 
-(message "Supercharged!") ; We're done!
-
 (with-eval-after-load 'workgroups2
   (workgroups-mode t)) ; XXX Keep at the very bottom.
