@@ -621,11 +621,148 @@
   :init
   (savehist-mode))
 
-;; Custom completion style using space-separated components:
-
+;; Custom completion style using spaces:
+;;
+;; TODO Dig further into options this package provides.
 (use-package orderless
   :straight t
   :ensure t
   :custom
   (completion-styles '(orderless basic))
   (completion-category-overrides '((file (styles basic partial-completion)))))
+
+;; Add visual hints of changes in text:
+
+(use-package volatile-highlights
+  :straight t
+  :ensure t
+  :init
+  (volatile-highlights-mode t))
+
+;; More visual hints after jumps:
+
+(use-package pulsar
+  :straight t
+  :ensure t
+  :init
+  (setq pulsar-pulse-functions
+        '(recenter-top-bottom
+          move-to-window-line-top-bottom
+          reposition-window
+          forward-page
+          backward-page
+          scroll-up-command
+          scroll-down-command
+          org-next-visible-heading
+          org-previous-visible-heading
+          org-forward-heading-same-level
+          org-backward-heading-same-level
+          outline-backward-same-level
+          outline-forward-same-level
+          outline-next-visible-heading
+          outline-previous-visible-heading
+          outline-up-heading))
+  (setq pulsar-pulse-on-window-change t)
+  (setq pulsar-pulse t)
+  (setq pulsar-delay 0.055)
+  (setq pulsar-iterations 10)
+  (setq pulsar-face 'pulsar-magenta)
+  (setq pulsar-highlight-face 'pulsar-yellow)
+  (pulsar-global-mode t))
+
+;; Automatic window layout:
+
+(use-package zoom
+  :straight t
+  :ensure t
+  :init
+  (zoom-mode t))
+
+;; Visually separate non-file-visiting-windows:
+
+(use-package solaire-mode
+  :straight t
+  :ensure t
+  :init
+  (solaire-global-mode t))
+
+;; Show overlays over occurences:
+
+(use-package symbol-overlay
+  :straight t
+  :ensure t
+  :init
+  (define-key evil-normal-state-map (kbd "M-n") 'symbol-overlay-jump-next)
+  (define-key evil-normal-state-map (kbd "M-N") 'symbol-overlay-jump-prev)
+  (define-key evil-normal-state-map (kbd "m") 'symbol-overlay-put))
+
+;; Many active cursors:
+
+(use-package multiple-cursors 
+  :straight t
+  :ensure t
+  :init
+  (global-set-key (kbd "C-<down-mouse-1>") 'mc/add-cursor-on-click))
+
+;; Make cursor jump to the point:
+
+(use-package ace-jump-mode
+  :straight t
+  :ensure t
+  :init
+  (define-key evil-normal-state-map (kbd "SPC") 'ace-jump-mode))
+
+;; Go back to last change:
+
+(use-package goto-last-change
+  :straight t
+  :ensure t
+  :init
+  (define-key evil-normal-state-map (kbd "DEL") 'goto-last-change))
+
+;; Change multiple files from single buffer:
+
+(use-package multifiles
+  :straight t
+  :ensure t
+  :init
+  (global-set-key (kbd "C-!") 'mf/mirror-region-in-multifile))
+
+;; Mode line enhancements:
+
+(use-package telephone-line
+  :straight t
+  :ensure t
+  :init
+  (setq mode-line-position (list "L%l C%c"))
+  (setq telephone-line-lhs
+        '((evil . (telephone-line-evil-tag-segment))
+          (nil  . (telephone-line-projectile-buffer-segment))))
+  (setq telephone-line-rhs
+        '((nil  . (telephone-line-misc-info-segment))
+          (evil . (telephone-line-atom-encoding-segment
+                   telephone-line-atom-eol-segment
+                   telephone-line-position-segment))))
+  (telephone-line-mode t))
+
+;; Overpowered Dired:
+;;
+;; NOTE This package needs GNU Coreutils installed.
+(use-package dirvish
+  :straight t
+  :ensure t
+  :init
+  (dirvish-override-dired-mode))
+
+;; Save and load presets of files open:
+
+(use-package workgroups2
+  :straight t
+  :ensure t
+  :init
+  (setq wg-prefix-key "C-c C-z"))
+
+(message "Supercharged!") ; We're done!
+
+(with-eval-after-load 'workgroups2
+  (workgroups-mode t)) ; XXX Keep at the very bottom.
