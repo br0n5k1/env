@@ -771,7 +771,11 @@
   :ensure t
   :defer t
   :config
-  (setq treemacs-position 'right)
+  (setq treemacs-silent-refresh t)
+  (setq treemacs-silent-filewatch t)
+  (setq treemacs-collapse-dirs 5)
+  (setq treemacs-is-never-other-window t)
+  (setq treemacs-no-png-images t)
   (treemacs-project-follow-mode t)
   (treemacs-follow-mode t)
   (treemacs-filewatch-mode t)
