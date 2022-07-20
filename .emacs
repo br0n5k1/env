@@ -92,8 +92,8 @@
 ;; Add basic comforts for text:
 
 (add-hook 'text-mode-hook
-	  (lambda ()
-	    (visual-line-mode t)))
+          (lambda ()
+            (visual-line-mode t)))
 
 ;; Add basic comforts for programming:
 
