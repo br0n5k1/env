@@ -757,7 +757,7 @@
 
 ;; Overpowered Dired:
 ;;
-;; NOTE This package needs GNU Coreutils installed.
+;; NOTE This package require GNU coreutils.
 (use-package dirvish
   :straight t
   :ensure t
