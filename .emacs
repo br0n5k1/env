@@ -159,6 +159,16 @@
   :init
   (global-set-key (kbd "M-;") 'evilnc-comment-or-uncomment-lines))
 
+(use-package evil-multiedit
+  :straight t
+  :ensure t
+  :init
+  (define-key evil-normal-state-map (kbd "1") 'evil-multiedit-match-and-next)
+  (define-key evil-visual-state-map (kbd "1") 'evil-multiedit-match-and-next)
+  (define-key evil-normal-state-map (kbd "2") 'evil-multiedit-match-and-prev)
+  (define-key evil-visual-state-map (kbd "2") 'evil-multiedit-match-and-prev)
+  (define-key evil-visual-state-map "R" 'evil-multiedit-match-all))
+
 ;; Use Magit for superior Git experience:
 
 (use-package magit
