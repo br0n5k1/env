@@ -39,7 +39,6 @@
 (set-keyboard-coding-system 'utf-8)
 
 ;; Skip boring dialogs:
-
 (require 'dired)
 
 (setq dired-recursive-copies 'always)
