@@ -491,6 +491,7 @@
 (use-package projectile
   :straight t
   :ensure t
+  :after (magit)
   :init
   (projectile-mode t)
   (update-projects)
