@@ -517,6 +517,8 @@
   :config
   (marginalia-mode))
 
+;; NOTE I gave up on Embark so far after a couple of attemts to make it work for me.
+
 ;; Cool interface for context switching:
 ;;
 ;; NOTE This configuration is a rough copy from package documentation.
