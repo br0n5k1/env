@@ -203,11 +203,24 @@
 (use-package web-mode
   :straight t
   :ensure t
+  :after (company)
+  :hook
+  (web-mode . (lambda () (set (make-local-variable 'company-backends) '(company-css company-web-html company-yasnippet company-files))))
   :init
   (setq web-mode-markup-indent-offset 1)
   (setq web-mode-style-padding 1)
   (setq web-mode-script-padding 1)
+  (setq web-mode-enable-current-column-highlight t)
+  (setq web-mode-enable-current-element-highlight t)
   (add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode)))
+
+;; Emmet completions for HTML and CSS:
+
+(use-package emmet-mode
+  :straight t
+  :ensure t
+  :hook
+  (web-mode . emmet-mode))
 
 ;; Add basic support for Rust, a recent addition to my toolchain:
 
