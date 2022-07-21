@@ -219,8 +219,11 @@
 (use-package emmet-mode
   :straight t
   :ensure t
+  :after (web-mode)
   :hook
-  (web-mode . emmet-mode))
+  (web-mode . emmet-mode)
+  :config
+  (setq emmet-self-closing-tag-style ""))
 
 ;; Add basic support for Rust, a recent addition to my toolchain:
 
