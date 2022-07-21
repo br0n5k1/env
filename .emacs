@@ -232,6 +232,9 @@
   :config
   (setq rust-format-on-save t))
 
+;; Add Cargo binaries to the `exec-path' list:
+(push (expand-file-name "~/.cargo/bin") exec-path)
+
 ;; Add basic support for Haskell:
 
 (use-package haskell-mode
