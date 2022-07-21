@@ -261,8 +261,10 @@
 (use-package js2-mode
   :straight t
   :ensure t
+  :after (web-mode emmet-mode)
   :init
-  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
+  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+  (add-to-list 'emmet-jsx-major-modes 'js2-jsx-mode))
 
 (use-package js2-refactor
   :straight t
