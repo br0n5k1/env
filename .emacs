@@ -808,7 +808,16 @@
   :after (treemacs magit)
   :ensure t)
 
-;; TODO Use Flycheck.
+;; Check syntax on the fly:
+;;
+;; NOTE This package requires external program such as eslint.
+(use-package flycheck
+  :straight t
+  :ensure t
+  :hook
+  (after-init . global-flycheck-mode)
+  :config
+  (push 'idle-buffer-switch flycheck-check-syntax-automatically))
 
 ;; Save and load presets of files open:
 
