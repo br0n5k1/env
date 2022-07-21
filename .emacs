@@ -245,7 +245,7 @@
 
 ;; Use tree-sitter to highlight programming languages:
 
-(defconst supports/dynamic-module 
+(defconst supports/dynamic-module
   (and (functionp 'module-load) (not (null module-file-suffix))))
 
 (use-package tree-sitter
