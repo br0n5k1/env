@@ -829,6 +829,28 @@
   :config
   (push 'idle-buffer-switch flycheck-check-syntax-automatically))
 
+;; Provide HTTP REST client to test APIs:
+
+(use-package restclient
+  :straight t
+  :ensure t
+  :mode
+  (("\\.api\\'" . restclient-mode)
+   ("\\.http\\'" . restclient-mode)))
+
+(use-package company-restclient
+  :straight t
+  :ensure t
+  :after (company restclient))
+
+;; See https://joseph8th.github.io/posts/wow-writing-literate-api-documentation-in-emacs-org-mode/
+(use-package ob-restclient
+  :straight t
+  :ensure t
+  :after (restclient)
+  :init
+  (org-babel-do-load-languages 'org-babel-load-languages '((restclient .t))))
+
 ;; Save and load presets of files open:
 
 (use-package workgroups2
