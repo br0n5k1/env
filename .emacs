@@ -517,8 +517,6 @@
   :config
   (marginalia-mode))
 
-
-
 ;; Cool interface for context switching:
 ;;
 ;; NOTE This configuration is a rough copy from package documentation.
