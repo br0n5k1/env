@@ -209,6 +209,16 @@
   (setq web-mode-script-padding 1)
   (add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode)))
 
+;; Add basic support for Rust, a recent addition to my toolchain:
+
+(use-package rust-mode
+  :straight t
+  :ensure t
+  :bind
+  ("C-c C-c" . rust-run)
+  :config
+  (setq rust-format-on-save t))
+
 ;; Add basic support for Haskell:
 
 (use-package haskell-mode
