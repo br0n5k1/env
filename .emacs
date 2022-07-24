@@ -487,12 +487,15 @@
 (use-package projectile
   :straight t
   :ensure t
+  :bind
+  ("C-x C-b" . projectile-switch-to-buffer)
   :init
   (projectile-mode t)
   (update-projects)
   (define-key projectile-mode-map (kbd "M-p") 'projectile-command-map)
   (setq projectile-require-project-root t)
-  (setq projectile-switch-project-action #'projectile-find-file)
+  (setq projectile-buffers-filter-function #'projectile-buffers-with-file-or-process)
+  (setq projectile-switch-project-action #'projectile-find-file) ; TODO Try already opened.
   (setq projectile-enable-caching t)
   (setq projectile-file-exists-remote-cache-expire nil))
 
