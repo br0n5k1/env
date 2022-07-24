@@ -212,6 +212,8 @@
   (setq web-mode-script-padding 1)
   (setq web-mode-enable-current-column-highlight t)
   (setq web-mode-enable-current-element-highlight t)
+  ;; TODO Use :mode from use-package.
+  (add-to-list 'auto-mode-alist '("\\.css\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode)))
 
 ;; Emmet completions for HTML and CSS:
@@ -225,18 +227,13 @@
   :config
   (setq emmet-self-closing-tag-style ""))
 
-;; Add basic support for Rust, a recent addition to my toolchain:
+;; Add basic support for Zig:
 
-(use-package rust-mode
+(use-package zig-mode
   :straight t
   :ensure t
-  :bind
-  ("C-c C-c" . rust-run)
-  :config
-  (setq rust-format-on-save t))
-
-;; Add Cargo binaries to the `exec-path' list:
-(push (expand-file-name "~/.cargo/bin") exec-path)
+  :mode
+  ("\\.zig\\'" . zig-mode))
 
 ;; Add basic support for Haskell:
 
@@ -491,7 +488,6 @@
 (use-package projectile
   :straight t
   :ensure t
-  :after (magit)
   :init
   (projectile-mode t)
   (update-projects)
