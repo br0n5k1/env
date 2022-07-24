@@ -12,4 +12,4 @@ if [[ ! -d $SRC_DIRECTORY ]]; then
     mkdir $SRC_DIRECTORY
 fi
 
-export PATH="$BIN_DIRECTORY:$PATH"
+export PATH="$BIN_DIRECTORY/zig-latest:$BIN_DIRECTORY:$PATH"
