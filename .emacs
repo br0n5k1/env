@@ -778,7 +778,8 @@
         '((evil . (telephone-line-evil-tag-segment))
           (nil  . (telephone-line-projectile-buffer-segment))))
   (setq telephone-line-rhs
-        '((nil  . (telephone-line-misc-info-segment))
+        '((nil  . (telephone-line-misc-info-segment
+                   telephone-line-simple-major-mode-segment))
           (evil . (telephone-line-atom-encoding-segment
                    telephone-line-atom-eol-segment
                    telephone-line-position-segment))))
